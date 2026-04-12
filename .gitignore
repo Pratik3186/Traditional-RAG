@@ -1,0 +1,35 @@
+# 🔐 Secrets
+.env
+
+# 🐍 Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 📦 Virtual Environment
+.venv/
+venv/
+
+# 📓 Jupyter
+.ipynb_checkpoints/
+
+# 🧠 Vector DB / Embeddings
+vector_store/
+*.sqlite3
+
+# 📁 OS files
+.DS_Store
+Thumbs.db
+
+# 🧪 Logs
+*.log
+
+# ⚙️ IDE
+.vscode/
+.idea/
+
+# 📦 Build files
+dist/
+build/
+*.egg-info/
