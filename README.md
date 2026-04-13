@@ -1,102 +1,111 @@
-# 🚀 Advanced RAG Pipeline (Production-Ready)
+# 🚀 Advanced RAG Pipeline with Typesense + Groq
 
-A **production-grade Retrieval-Augmented Generation (RAG) system** built using modern LLM tooling.
-This project demonstrates **end-to-end document understanding**, semantic search, and intelligent answer generation with **citations, summaries, and history tracking**.
+A **production-ready Retrieval-Augmented Generation (RAG) system** that combines:
+
+⚡ **Semantic Search (Vector DB)** + 🔍 **Keyword Search (Typesense)** + 🤖 **LLM (Groq)**
+
+This project demonstrates a **Hybrid RAG architecture**, improving retrieval accuracy and reducing hallucinations in LLM responses.
 
 ---
 
 ## 🔥 Key Features
 
-* 📄 **PDF/Text Document Ingestion**
-* ✂️ **Smart Chunking (Recursive Splitting)**
-* 🧠 **Semantic Embeddings (Sentence Transformers)**
-* ⚡ **Vector Search (FAISS)**
-* 🤖 **LLM Integration (Groq - LLaMA 3.1)**
-* 📌 **Context-aware Answer Generation**
-* 🔗 **Citations (source + page tracking)**
-* 🧾 **Answer Summarization**
-* 🕓 **Query History Tracking**
-* ⚡ **Streaming Responses (LLM output)**
+* 📄 PDF & Text Document Ingestion
+* ✂️ Intelligent Chunking
+* 🧠 Semantic Embeddings (Sentence Transformers)
+* ⚡ Vector Search (FAISS)
+* 🔍 Keyword Search (Typesense)
+* 🔀 Hybrid Retrieval (Vector + Keyword)
+* 🤖 Groq LLM Integration (LLaMA 3.1)
+* 📌 Context-Aware Answer Generation
+* 🔗 Source Citations
+* 🧾 Answer Summarization
+* 🕓 Query History Tracking
+* ⚡ Streaming Responses
 
 ---
 
 ## 🏗️ Architecture Diagram
 
-```
-                ┌────────────────────┐
-                │    User Query      │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │  Query Embedding   │
-                │ (SentenceTransformer)
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │   Vector Store     │
-                │     (FAISS)        │
-                └─────────┬──────────┘
-                          │
-                Top-K Relevant Chunks
-                          │
-                          ▼
-                ┌────────────────────┐
-                │  Context Builder   │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │      LLM (Groq)    │
-                │   LLaMA 3.1 Model  │
-                └─────────┬──────────┘
-                          │
-                          ▼
-        ┌─────────────────────────────────────┐
-        │ Answer + Citations + Summary       │
-        └─────────────────────────────────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │   History Store    │
-                └────────────────────┘
+```id="arch1"
+                 ┌────────────────────┐
+                 │    User Query      │
+                 └─────────┬──────────┘
+                           │
+           ┌───────────────┴───────────────┐
+           │                               │
+           ▼                               ▼
+┌────────────────────┐        ┌────────────────────┐
+│ Vector Search      │        │ Keyword Search     │
+│ (FAISS)            │        │ (Typesense)        │
+└─────────┬──────────┘        └─────────┬──────────┘
+          │                             │
+          └──────────────┬──────────────┘
+                         ▼
+              ┌────────────────────┐
+              │  Result Fusion     │
+              └─────────┬──────────┘
+                        │
+                        ▼
+              ┌────────────────────┐
+              │ Context Builder    │
+              └─────────┬──────────┘
+                        │
+                        ▼
+              ┌────────────────────┐
+              │    LLM (Groq)      │
+              │ LLaMA 3.1 Model    │
+              └─────────┬──────────┘
+                        │
+                        ▼
+   ┌────────────────────────────────────────────┐
+   │ Answer + Citations + Summary              │
+   └────────────────────────────────────────────┘
+                        │
+                        ▼
+              ┌────────────────────┐
+              │   History Store    │
+              └────────────────────┘
 ```
 
 ---
 
 ## 🧠 How It Works
 
-1. **Documents are loaded** (PDF/Text)
-2. Split into chunks using **RecursiveCharacterTextSplitter**
-3. Convert chunks → **vector embeddings**
-4. Store embeddings in **FAISS vector database**
-5. User query → converted to embedding
-6. Retrieve top-K similar chunks
-7. Pass context + query to **Groq LLM**
-8. Generate:
+1. Documents (PDF/Text) are loaded
+2. Split into chunks
+3. Converted into embeddings
+4. Stored in FAISS (vector DB)
+5. Indexed in Typesense (keyword search)
+6. User query is processed
+7. Retrieval happens via:
 
-   * Answer ✅
-   * Citations ✅
-   * Summary ✅
-9. Store interaction in **history**
+   * Semantic search (FAISS)
+   * Keyword search (Typesense)
+8. Results are combined (Hybrid Retrieval)
+9. Context sent to Groq LLM
+10. LLM generates:
+
+* Answer
+* Citations
+* Summary
 
 ---
 
 ## ⚙️ Tech Stack
 
 * **LangChain**
+* **FAISS (Vector Database)**
+* **Typesense (Keyword Search Engine)**
 * **Groq API (LLaMA 3.1)**
-* **FAISS (Vector DB)**
 * **Sentence Transformers**
 * **Python**
-* **Jupyter Notebook**
 
 ---
 
 ## 📁 Project Structure
 
-```
+```id="struct1"
 Traditional_RAG/
 │
 ├── data/
@@ -104,9 +113,6 @@ Traditional_RAG/
 │   └── text_files/
 │
 ├── notebook/
-│   └── document.ipynb
-│
-├── vector_store/        # (ignored in git)
 ├── main.py
 ├── requirements.txt
 ├── README.md
@@ -120,16 +126,17 @@ Traditional_RAG/
 
 Create `.env` file:
 
-```
-GROQ_API_KEY=your_api_key_here
+```id="env1"
+GROQ_API_KEY=your_groq_key
+TYPESENSE_API_KEY=your_typesense_key
 ```
 
 ---
 
 ## 🚀 Installation
 
-```bash
-git clone https://github.com/your-username/Traditional-RAG.git
+```bash id="inst1"
+git clone https://github.com/Pratik3186/Traditional-RAG.git
 cd Traditional-RAG
 
 pip install -r requirements.txt
@@ -139,69 +146,70 @@ pip install -r requirements.txt
 
 ## ▶️ Usage
 
-Run your notebook or script:
-
-```bash
+```bash id="run1"
 python main.py
 ```
 
-Example query:
+Example:
 
-```
-What is RAG?
+```id="example1"
+Query: What is RAG?
 ```
 
 ---
 
 ## 🧾 Sample Output
 
-```
+```id="out1"
 Answer:
-RAG (Retrieval-Augmented Generation) combines retrieval of relevant documents
-with LLM-based generation...
+RAG combines retrieval with generation...
 
 Citations:
-[1] research_paper.pdf (page 3)
+[1] research_paper.pdf (page 2)
 
 Summary:
-RAG improves LLM accuracy by grounding responses in retrieved data.
+RAG improves LLM accuracy using external knowledge.
 ```
 
 ---
 
-## 🧠 Why This Project Matters
+## 🔥 Why Hybrid RAG?
 
-This project demonstrates:
+Traditional RAG uses only vector search.
 
-* Real-world **LLM system design**
-* Understanding of **vector databases**
-* Practical use of **RAG architecture**
-* Handling **LLM limitations (hallucination)**
+👉 Hybrid RAG improves:
+
+* ✅ Accuracy
+* ✅ Relevance
+* ✅ Recall
+
+By combining:
+
+* Semantic understanding (FAISS)
+* Exact keyword matching (Typesense)
 
 ---
 
 ## 💡 Future Improvements
 
-* 🔍 Hybrid Search (BM25 + Vector)
-* 🧠 Re-ranking (Cross-Encoder)
+* 🔄 Re-ranking (Cross-Encoder)
+* 📊 Evaluation (RAGAS)
 * 🌐 Web UI (Streamlit / React)
-* 📊 Evaluation Metrics (RAGAS)
-* 🔄 Real-time document updates
+* ☁️ Deployment
 
 ---
 
 ## 🏆 Resume Highlight
 
-> Built a production-ready Retrieval-Augmented Generation (RAG) system using FAISS, Groq LLM, and LangChain with features like citation tracking, summarization, and semantic search.
+> Built a Hybrid RAG system using FAISS and Typesense with Groq LLM, enabling accurate and context-aware responses with citation tracking and summarization.
 
 ---
 
 ## 📬 Contact
 
 **Pratik**
-
-* GitHub: https://github.com/Pratik3186
+GitHub: https://github.com/Pratik3186
 
 ---
 
-⭐ If you like this project, give it a star!
+⭐ Star this repo if you found it useful!
