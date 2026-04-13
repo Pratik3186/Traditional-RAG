@@ -1,0 +1,24 @@
+# 🔐 Secrets
+.env
+
+# 🐍 Python
+__pycache__/
+*.pyc
+
+# 📦 Virtual Env
+.venv/
+
+# 📓 Jupyter
+.ipynb_checkpoints/
+
+# 🧠 Vector DB
+vector_store/
+*.sqlite3
+
+# 📁 OS
+.DS_Store
+Thumbs.db
+
+# ⚙️ IDE
+.vscode/
+.idea/
